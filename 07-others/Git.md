@@ -12,7 +12,6 @@ Si ves algo como id_rsa y id_rsa.pub o id_ed25519 y id_ed25519.pub, significa qu
     ssh-keygen -t ed25519 -C "tu-email-de-github"
 
 Te va a preguntar dónde guardar la clave (enter para la ruta por defecto)
-
 Podés dejar passphrase vacío (o poner uno si querés más seguridad)
 
 3️⃣ Agregar la clave al agente SSH
@@ -33,5 +32,6 @@ Pegás la clave, le ponés un nombre, guardás.
     ssh -T git@github.com
 
 Si todo está bien, te va a decir algo como:
+
 
     Hi "user_name"! You've successfully authenticated...
