@@ -49,6 +49,7 @@ project-devops-infra/
 - `04-monitoring/` → Configuración de Prometheus y Grafana
 - `05-terraform/` → Provisionamiento de infraestructura en cloud
 - `06-ci-cd/` → Flujos de integración y despliegue continuo
+- `07-others/` → Interesante
 
 
 ## 📬 Contacto
