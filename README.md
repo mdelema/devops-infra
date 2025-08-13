@@ -41,7 +41,6 @@ project-devops-infra/
 
 ---
 
-```markdown
 **Descripción rápida de módulos:**
 - `01-setup-bash/` → Scripts de automatización inicial
 - `02-docker/` → Apps containerizadas con Docker y Compose
