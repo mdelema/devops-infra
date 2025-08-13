@@ -40,6 +40,7 @@ project-devops-infra/
 └── README.md
 
 ---
+```
 
 **Descripción rápida de módulos:**
 - `01-setup-bash/` → Scripts de automatización inicial
