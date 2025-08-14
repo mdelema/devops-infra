@@ -46,7 +46,7 @@ $ProjectName/
 └── README.md
 ```
 
-## Descripción rápida de módulos:
+## 🎯 Descripción rápida de módulos:
 - `01-setup-bash/` → Scripts de automatización inicial
 - `02-docker/` → Apps containerizadas con Docker y Compose
 - `03-kubernetes/` → Manifiestos K8s (deployment/service)
@@ -69,4 +69,5 @@ $ProjectName/
 
 ## 📬 Contacto
 **Marcos de Lema**  
+
 [LinkedIn](https://www.linkedin.com/in/marcos-de-lema/) | [GitHub](https://github.com/mdelema)
