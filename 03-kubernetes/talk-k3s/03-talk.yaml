@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: talk
+  namespace: talk-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: talk
+  template:
+    metadata:
+      labels:
+        app: talk
+    spec:
+      containers:
+      - name: talk
+        image: coralproject/talk:7
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGODB_URI
+          value: mongodb://mongo:27017/coral
+        - name: REDIS_URI
+          value: redis://redis:6379
+        - name: SIGNING_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: talk-secret
+              key: SIGNING_SECRET
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: talk
+  namespace: talk-ns
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 5000
+      nodePort: 30090
+  selector:
+    app: talk

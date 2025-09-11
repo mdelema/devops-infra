@@ -17,43 +17,45 @@ $ProjectName/
 │   └── scripts-iniciales.sh
 ├── 02-docker/
 │   ├── app-node/
-│   │   ├── Dockerfile
-│   │   └── docker-compose.yml
+│   └── talk-coral/
 ├── 03-kubernetes/
-│   ├── deployment.yaml
-│   └── service.yaml
+│   ├── other
+│   └── talk-k3s
 ├── 04-ansible/
 │   └── playbooks/
-│       ├── install-nginx.yml
-│       └── deploy-nodeapp.yml
 ├── 05-terraform/
 │   ├── aws/
-│   │   └── ec2.tf
 │   └── digitalocean/
-│       └── droplet.tf
 ├── 06-monitoring/
 │   ├── prometheus/
-│   │   └── prometheus.yml
 │   └── grafana/
-│       └── README.md
 ├── 07-ci-cd/
 │   ├── github-actions/
-│   │   └── pipeline.yml
 │   ├── gitlab-ci/
-│   │   └── .gitlab-ci.yml
 │   └── jenkins/
-│       └── Jenkinsfile
+├── 08-other-project/
+│   └── --/
+├── 09-automate/
+│   └── --/
+├── 10-powershell/
+│   └── --/
+├── 11-command-list/
+│   └── --/
 └── README.md
 ```
 
-## 🎯 Descripción rápida de módulos:
-- `01-setup-bash/` → Scripts de automatización inicial
-- `02-docker/` → Apps containerizadas con Docker y Compose
-- `03-kubernetes/` → Manifiestos K8s (deployment/service)
-- `04-ansible/` → Playbooks de configuración y despliegue
-- `05-terraform/` → Provisionamiento de infraestructura en cloud
-- `06-monitoring/` → Configuración de Prometheus y Grafana
-- `07-ci-cd/` → Flujos de integración y despliegue continuo
+## 📂 Estructura del repositorio
+
+- [01-bash-scripts](01-bash-scripts/) → Scripts de automatización inicial.
+- [02-docker](02-docker/) → Proyectos con Docker y Docker Compose.
+- [03-kubernetes](03-kubernetes/) → Manifests y despliegues en Kubernetes.
+- [04-ansible](04-ansible/) → Playbooks de automatización.
+- [05-terraform](05-terraform/) → Infraestructura como código.
+- [06-monitoring](06-monitoring/) → Prometheus + Grafana.
+- [07-others-proyectos](07-others-proyectos/) → Experimentos y labs.
+- [08-automate](08-automate/) → Flujos de automatización avanzada.
+- [09-powershell](09-powershell/) → Scripts de PowerShell.
+- [10-comand-list](10-comand-list/) → Tips y colecciones de comandos.
 
 ## 📌 Tecnologías y herramientas utilizadas
 - Linux (Debian/Ubuntu/CentOS)
