@@ -20,7 +20,8 @@ $ProjectName/
 │   └── talk-coral/
 ├── 03-kubernetes/
 │   ├── other
-│   └── talk-k3s
+│   ├── sonarkube
+│   └── talk
 ├── 04-ansible/
 │   └── playbooks/
 ├── 05-terraform/
@@ -73,3 +74,4 @@ $ProjectName/
 **Marcos de Lema**  
 
 [LinkedIn](https://www.linkedin.com/in/marcos-de-lema/) | [GitHub](https://github.com/mdelema)
+
