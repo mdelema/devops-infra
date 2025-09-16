@@ -1,0 +1,35 @@
+#------------------------------------------------------------------------#
+# Habilitar Developer
+edition: developer
+
+# Configurar el passcode 
+monitoringPasscode: jl4+qsxcYfrXDA3K
+
+
+# Configurar PostgreSQL
+postgresql:
+  enabled: true
+
+# Configurar recursos (SonarQube)
+resources:
+  requests:
+    cpu: 500m
+    memory: 2Gi
+  limits:
+    cpu: "2"
+    memory: 4Gi
+
+# Persistencia
+persistence:
+  size: 10Gi
+
+# Exponer el servicio
+service:
+  type: NodePort
+  port: 9000
+  nodePort: 30000
+#------------------------------------------------------------------------#
+# Habilitar la Community Edition
+#community:
+#  enabled: true
+#------------------------------------------------------------------------#
