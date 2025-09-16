@@ -1,6 +1,6 @@
 # DevOps & Infra 🚀
 
-Este repositorio es un **portfolio de proyectos DevOps enfocados en infraestructura**, mostrando habilidades en:
+Este repositorio es un **portfolio de proyectos DevOps enfocados en infraestructura**:
 
 - **Automatización** con Bash y Ansible
 - **Contenerización** con Docker, Docker Compose y Kubernetes
@@ -69,6 +69,7 @@ $ProjectName/
 **Marcos de Lema**  
 
 [LinkedIn](https://www.linkedin.com/in/marcos-de-lema/) | [GitHub](https://github.com/mdelema)
+
 
 
 
