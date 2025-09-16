@@ -6,7 +6,7 @@ CPU = 2 core ------->	4 cores
 Disco = +30GB ------>	40Gb
 
 1 - Instalar K3s
-	i_k3s.sh 	---> (esta en: /root/scripts/)
+	i_k3s.sh 	---> (esta en: /01-bash/containers)
 
 2 - Instalar Helm
 	curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
