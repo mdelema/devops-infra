@@ -1,0 +1,210 @@
+>> FAQ para PWM 2.0.8 - Ubuntu 24.4 <<
+# No se puede en Tomcat 10 porque es incompatible con: jakarta.servlet.*
+
+# En root
+1- Actualizar sistema
+	apt update && apt upgrade -y
+
+2- Instalar Apache2
+	apt install -y apache2
+
+3- Instalar php y las librerias 
+	apt install -y php libapache2-mod-php
+
+4- Instalar Java 17 o superior
+	apt install openjdk-17-jdk-headless -y
+
+5- Crear usuario Tomcat
+	useradd -r -m -U -d /opt/tomcat -s /bin/false tomcat
+
+6- Descarar Tomcat10 (al momento es v9.0.107)
+	cd /tmp/
+	wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.107/bin/apache-tomcat-9.0.107.tar.gz
+	#-> Verificar la descarga
+	sha512sum -c apache-tomcat-9.0.107.tar.gz.sha512
+
+7- Crear la carpeta /opt/tomcat 
+	mkdir -p /opt/tomcat
+	chown tomcat:tomcat /opt/tomcat
+
+8- Instalar Tomcat
+	#-> Descomprime el archivo descargado y mueve los archivos a /opt/tomcat:
+	tar -tvf apache-tomcat-9.0.107.tar.gz
+	mv apache-tomcat-9.0.107 /opt/tomcat
+	#-> Darle permisos (user: tomcat)
+	chown -R tomcat:tomcat /opt/tomcat
+
+9- Configurar Tomcat
+	nano /etc/systemd/system/tomcat.service
+	#-> Pegar lo siguiente:
+#----------------------------------------------------------------------------#
+[Unit]
+Description=Apache Tomcat 9 Web Application Server
+After=network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+# Configuration
+#Environment="PWM_APPLICATIONPATH=/home/pwm-data"
+Environment="JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64"
+Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
+Environment="CATALINA_HOME=/opt/tomcat"
+Environment="CATALINA_BASE=/opt/tomcat"
+Environment="CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC -Djava.awt.headless=true"
+
+# Lifecycle
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+# Security
+#ReadWritePaths=/home/pwm-data/
+
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+#----------------------------------------------------------------------------#
+	#-> Guardar y Salir
+	#-> Recargar el daemon de systemd
+	systemctl daemon-reload
+
+10- Iniciar y habilitar el servicio de Tomcat
+	systemctl enable --now tomcat
+	systemctl status tomcat
+
+11- Abrir el puerto 8080 en el firewall
+	ufw allow 8080/tcp
+	
+12- Acceder a Tomcat10
+	http://<tu-ip-del-servidor>:8080
+	
+13- Configurar el acceso remoto al panel de administración
+	nano /opt/tomcat/conf/tomcat-users.xml
+	#-> Pegar lo siguiente al final, justo antes de </tomcat-users>:
+<!-- NUEVO -->
+  <role rolename="manager-gui"/>
+  <role rolename="admin-gui"/>
+  <role rolename="manager-script"/>
+  <user username="admin" password="admin" roles="manager-gui,admin-gui,manager-script"/>
+<!-- #### -->
+	#-> Guardar y Salir
+	#-> Reiniciar Tomcat
+	systemctl restart tomcat
+
+14- Permitir acceso remoto
+	#-> 1. Editar el Manager App’s "context.xml"
+	nano /opt/tomcat/webapps/manager/META-INF/context.xml
+	  # Comentar la siguiete linea: (tal como se muestra)
+	  <!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+       allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
+	   
+	#-> 2. Editar el Host Manager’s "context.xml"
+	nano /opt/tomcat/webapps/host-manager/META-INF/context.xml
+	  # - Comentar la siguiete linea: (tal como se muestra)
+	  <!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
+
+15- Instalar la versión actual de MySql 8
+	apt install -y mysql-server
+	#-> Opcional: 
+	  > - Ejecutar un script de seguridad MySQL (si falla no pasa nada)
+		mysql_secure_installation
+	  > - Instalar PHPMyAdmin para administrar la base de datos MySQL
+		apt-get install -y phpmyadmin
+	  > - Instalar AutoMySQLBackup para realizar copias de seguridad
+		apt-get install automysqlbackup
+	  # Los archivos de respaldo se crean en la siguiente ubicación: /var/lib/automysqlbackup
+		
+16- Descargar PWM
+	#-> 1. Ir a: https://github.com/pwm-project/pwm/releases
+	#-> 2. Elegir la verion, desplegar los Assets y descargar el "pwm-(verion).war"
+	#-> 3. Dejar el archivo original en /root/pwm-releases
+	#-> 4. Copiar el archivo a la carpeta del tomcat /webapps:
+		cp /root/pwm-releases/pwm-2.0.8.war /opt/tomcat/webapps/
+	#-> 5. Renombrarlo para que tomcat lo vea:
+		mv /opt/tomcat/webapps/pwm-2.0.8.war /opt/tomcat/webapps/pwm.war
+
+17- Crear una carpeta de PWM para almacenar archivos de configuración
+	mkdir -p /home/pwm-data/
+	#-> Darle permisos
+	chown tomcat:tomcat /home/pwm-data/
+
+18- Revisar el archivo "tomcat.service" si ve la carpeta creada
+	nano /etc/systemd/system/tomcat.service
+	#-> Pegar lo siguiente debajo de cada uno:
+	[Service]
+	# Configuration
+	>> agregar: 	Environment="PWM_APPLICATIONPATH=/home/pwm-data"
+	
+	# Security
+	>> agregar: 	ReadWritePaths=/home/pwm-data/
+	
+	
+	#-> Reiniciar Tomcat
+	systemctl daemon-reload
+	systemctl enable tomcat
+	systemctl restart tomcat
+	systemctl status tomcat
+
+19- Recuperar los archivos.
+	ls  /opt/tomcat/webapps/pwm/public/resources/
+	#-> Descargar desde los respaldos o desde el server original la carpeta "tomcat-webapps" 
+		- Dentro de la carpeta, moverse hasta "pwm"
+		- Seleccionar la carpeta y dejarla por WinSCP en /home/ebuela
+	cd /home/ebuela/pwm/public/resources
+	cp -r * /var/lib/tomcat9/webapps/pwm/public/resources/.
+	service tomcat restart
+
+20- Verificar Postfix
+	service postfix status
+	apt install postfix
+	service postfix status
+	nano /etc/postfix/main.cf
+#----------------------------------------------------------------------------------------------------------------#
+# Postfix-Congig:
+# myorigin = /etc/mailname
+#
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+readme_directory = no
+
+# See http://www.postfix.org/COMPATIBILITY_README.html -- default to 2 on
+# fresh installs.
+compatibility_level = 2
+
+# TLS parameters
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtp_use_tls = yes
+smtp_tls_security_level = may
+smtp_tls_loglevel=2
+smtp_use_tls = yes
+
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = tool-gral-varios-pwm01.dominio.local
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+mydestination = $myhostname, tool-gral-varios-pwm01.dominio, tool-gral-varios-pwm01.dominio.local, localhost.dominio.local, localhost
+relayhost = 10.1.20.135:25
+mynetworks = 127.0.0.0/8 10.1.1.80/32
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = ipv4
+#----------------------------------------------------------------------------------------------------------------#
+
+	nano /etc/mailname
+	service postfix restart
+	service postfix status
+	apt install swaks
+	swaks --server localhost --to mdelema@dominio --from alertas-ti@dominio
+	mailq
+

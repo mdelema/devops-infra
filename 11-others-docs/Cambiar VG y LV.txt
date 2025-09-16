@@ -1,0 +1,17 @@
+#########################################################
+>>>>>>>>		Cambiar Vol y Log Volumen		<<<<<<<<
+vgdisplay
+vgrename servername-vg new_servername-vg
+
+nano /etc/fstab
+	>> new_servername-vg
+perl -i.old -npe 's/servername-vg/new_servername-vg/g' /boot/grub/grub.cfg
+update-initramfs -u 
+shotdown --> y luego APAGAR la maquina desde el WMware
+
+update-grub2
+
+- Anda: 
+nano /etc/initramfs-tools/conf.d/resume
+	>> Ej:  RESUME=/dev/mapper/enveroiment--name--vg-swap_1
+

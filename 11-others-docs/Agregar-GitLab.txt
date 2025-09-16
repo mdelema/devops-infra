@@ -1,0 +1,15 @@
+#------------------------------------------------------------------------------------#
+Agregue:
+dpkg -l gitlab-ce |o| 	apt show gitlab-ce  || sudo gitlab-ctl reconfigure
+nano /etc/apt/sources.list.d/gitlab_gitlab-ce.list:
+	deb https://packages.gitlab.com/gitlab/gitlab-ce/debian/ bookworm main
+	deb-src https://packages.gitlab.com/gitlab/gitlab-ce/debian/ bookworm main
+
+nano /var/opt/gitlab/postgresql/data/pg_hba.conf
+	# "local" is for Unix domain socket connections only
+	local   all     all     md5
+	local   all     all     peer map=gitlab
+
+sudo nano /var/opt/gitlab/postgresql/data/pg_ident.conf
+	# MAPNAME       SYSTEM-USERNAME         PG-USERNAME
+	gitlab          gitlab-psql             gitlab

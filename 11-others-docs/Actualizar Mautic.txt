@@ -1,0 +1,22 @@
+### Pruebas MAUTIC o cialquiera de lasdirecciones.
+
+- Actualizar el server de Mautic.
+- Pruebas de la WEB:
+	- Entrar al "Srv_TEST"
+		> nano /etc/nginx/sites-available/test-mautic.dominio.conf
+		> Cambiar la IP a donde apunta la web.
+			**  server 172.29.0.252:443 max_fails=3 fail_timeout=360s;
+		> nginx -t
+		> nginx -s reload
+	- Chequear el funcionamiento en la web.
+		> https://test-mautic.dominio/s/login
+			> user: epadmin
+
+-Pruebas de ENVIO DE MAILs
+	- Entrar al "Srv_RP"
+		> nano /etc/postfix/main.cf
+		> Agraegar IP del server a la lista.
+			** mynetworks = 127.0.0.0/8 172.29.0.252 **(agregado)**
+	- Chequear envio de mail.
+		>  swaks --to "other@gmail.com" --from "prueba@mails.com.uy" --server "Srv_TEST" --header "Subject: Mail de Prueba"
+

@@ -1,0 +1,107 @@
+	#--------------------------------------------------#
+	####	Crear e Instalar nuevo WordPress		####
+	#--------------------------------------------------#
+
+## Crear DNS:
+	## Crear en Cloudflare
+	Entrar a: "Dominio S.A"
+	Buscar el dominio: empresa.com.uy 
+		A la izquierda, entrar en: DNS 
+		- Agregar registro:
+			- Tipo: CNAME
+			- Nombre: NUEVO_SITO.com.uy
+			- Contenido: rp-prod , rp-test
+			- Guardar.
+	
+	## Crearlo en AD
+	entrar IP-AD
+	- Server Manager --> o buscar DNS Manager
+		> Roles 
+			> DNS Server
+			  > DNS
+				> SRV_RED
+				  > Forward Lookup Zones
+					- empresa.com.uy
+						- click derecho: New Alias (CNAME)..
+							- Alias name: NUEVO_SITO.com.uy
+							- (FQDN): NUEVO_SITO.com.uy
+							- (FQDN) for targuet host: rp-prod , rp-test (el mismo que Contenido)
+
+-----------------------------------------------------------------------------------------
+## Entrar al Srv-NGINX (putty)
+
+	cd /etc/nginx/site-avalaible/
+		nano NUEVO_SITO.com.uy
+			#-> completar con la nginx.config
+			#-> es mejor traer los datos de otro que ya este funcionando
+
+	ln -s /etc/ngix/site-avalaible/NUEVO_SITO.com.uy /etc/ngix/site-enable/
+	
+	nginx -t
+	nginx -s reload
+
+-----------------------------------------------------------------------------------------
+## Entrar al Srv-APP (putty)
+
+	cd /var/www/
+	mkdir NUEVO_SITO.com.uy
+	cd NUEVO_SITO.com.uy
+	mkdir htdocs logs
+	
+	## Instalar WordPress	
+		wget https://wordpress.org/latest.tar.gz
+		tar -xvf latest.tar.gz
+		unzip latest.zip
+		rm latest.zip
+		mv wordpress/* /var/www/NUEVO_SITO.com.uy/htdocs/
+		rm -r wordpress
+		chown -R www-data:www-data /var/www/NUEVO_SITO.com.uy
+		cd /htdocs/ 	|o| 	cd /var/www/NUEVO_SITO.com.uy/htdocs
+		mv wp-config-simple.php wp-config.php
+		nano wp-config.php
+			> DB_NAME: (KeyPass o MySQL WoedBranch)
+			> DB_USER: (KeyPass)
+			> DB_PASSWOR: (KeyPass)
+			> DB_HOST: i-mysql-01
+
+	cd /etc/nginx/site-avalaible/
+	nano NUEVO_SITO.com.uy
+			#-> completar con la nginx.config
+			#-> es mejor traer los datos de otro que ya este funcionando
+
+	ls -s /etc/ngix/site-avalaible/NUEVO_SITO.com.uy /etc/ngix/site-enable/
+	
+	nginx -t
+	nginx -s reload
+
+-----------------------------------------------------------------------------------------
+## Entrar a MySQL Wordbranch
+
+	root:
+	pass: i-
+	- crear base de dato
+		% Schemas
+			- dbNUEVO_SITO 
+				> aplicar
+		% Administration
+			- Users
+				> Login: Auth --> Standard 
+				> Schema Privileges --> Selected: NUEVO_SITO
+
+-----------------------------------------------------------------------------------------
+## Configurar WordPress - WEB
+
+	NUEVO_SITO.com.uy
+		- Español URU
+		- Titulo: NUEVO_SITO
+		- Nombre: rootep
+		- Contraseña: Sugerida
+		--> Creamos la entrada en KeePass
+		- Correo: persona@dominio
+		- Search engine: "tildarlo"
+		- Instalar WordPress
+		
+		--> Para administrarlo
+		- NUEVO_SITO.dominio/wp-admin
+			- Nombre: rootep
+			- Contraseña: Sugerida

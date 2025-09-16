@@ -1,0 +1,32 @@
+### 	Crear Plugin Output de Nginx y FPM-PHP
+	- nginx_status
+	- fpm_status
+
+>> Crear una ruta para el plugin
+nano /etc/nginx/sites-available/status.conf
+server {
+		listen 80;
+		server_name     <"server_name"> localhost;
+		location /nginx_status {
+				stub_status on;
+				access_log   off;
+				allow 127.0.0.1;
+				allow 192.168.6.0/23;
+				deny all;
+			}
+		location /fpm_status {
+				allow 127.0.0.1;
+				allow 10.0.0.0/8;
+				deny all;
+				fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+				fastcgi_index index.php;
+				fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+				include fastcgi_params;
+			}
+		}
+
+>> Agregar la <"IP_server"> y el <"server_name"> en el Icinga
+vim /etc/hosts
+	...
+	10.x.x.x      	check-ssl...
+	...

@@ -1,0 +1,73 @@
+#### 	EXPANDIR VG y LV
+
+- Verificar espacio está 
+	fdisk -l /dev/sda
+	)
+	lsblk
+	
+- Forzar la detección del nuevo tamaño del disco
+	echo "- - -" | tee /sys/class/scsi_host/host*/scan
+	
+- Crear la partición manualmente 
+	fdisk /dev/sda
+		Presiona:  n 									# crea una nueva partición.
+		Selecciona p 									#(primaria).
+		Número de partición: 3.							
+		Primer sector (..valor predeterminado ej: xx84): Valor +1 (xx85) 	#(Ingresar el valor predeterminado + 1).
+		Último sector (..valor predeterminado ej: xx79): Mismo valor (xx79)	#(Ingresar el valor predeterminado para asignar el total del espacio libre).
+		---
+		> Cambiar el tipo de partición a 8e (Linux LVM):
+		Presiona: t.
+		Selecciona la partición: 3.
+		Ingresa: 8e.
+		Escribe los cambios con: w.
+		
+- Actualizar la tabla de particiones
+	partx -u /dev/sda 	|o|  partprobe /dev/sda
+	fdisk -l /dev/sda
+
+-Inicializar la nueva partición como volumen físico
+	pvcreate /dev/sda3
+
+- Añadir la partición al grupo de volúmenes:
+	vgdisplay --> para saber el "VG Name"
+	vgextend tpl-debian12-vg /dev/sda3
+	
+- Extender el volumen lógico
+	lvdisplay --> para saber el "LV Path"
+	lvextend -l +100%FREE /dev/tpl-debian12-vg/root
+
+- Redimensionar el sistema de archivos
+	df -h --> para saber el /dev/mapper/
+	resize2fs /dev/mapper/tpl--debian12--vg-root
+		-----------------------------------------------------------
+		## Si falla reiniciar y volver a Actualizar la tabla de particiones	
+			partx -u /dev/sda
+			echo "- - -" | tee /sys/class/block/sda/device/rescan
+			fsck -n /dev/mapper/prep--gral--mail--mauticbd01--vg-root 	 - Verifica la integridad del sistema de archivos
+			resize2fs /dev/mapper/prep--gral--mail--mauticbd01--vg-root
+		-----------------------------------------------------------
+- Verificar el resultado
+	df -T /
+	df -h /
+	
+#--------------------------------------------------#	
+#--------------------------------------------------#	
+####	Expandir disco en Ubuntu
+#--------------------------------------------------#
+- Verificar espacio está 
+	fdisk -l /dev/sda
+	df -h / (vgdisplay, lvdisplay)
+	lsblk
+
+- Crear la partición manualmente 
+	fdisk /dev/sda
+	
+- Extender el volumen físico.
+	pvresize /dev/sda3
+	
+- Extender el volumen lógico
+	lvextend -l +100%FREE /dev/mapper/"-root"
+
+- Montar y darle formato las particiones 
+	resize2fs /dev/mapper/vgubuntu-root

@@ -1,0 +1,92 @@
+Instalar SonarQube
+
+Requisitos minimos	| Mi desarrollo
+RAM = 4 Gb	-------->	6GB
+CPU = 2 core ------->	4 cores
+Disco = +30GB ------>	40Gb
+
+1 - Instalar K3s
+	i_k3s.sh 	---> (esta en: /root/scripts/)
+
+2 - Instalar Helm
+	curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+	helm version
+
+3 - Agregar el repo de SonarQube
+	helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
+	helm repo update
+
+4 - Crear namespace
+nano 00-namespace.yaml
+
+#--------------------------#
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sonarqube
+#--------------------------#
+	
+6 - Crear archivo.yaml con las declaraciones:
+nano 01-values.yaml
+#------------------------------------------------------------------------#
+# Habilitar Developer
+edition: developer
+
+# Configurar el passcode
+monitoringPasscode: jl4+qsxcYfrXDA3K
+
+
+# Configurar PostgreSQL
+postgresql:
+  enabled: true
+
+# Configurar recursos (SonarQube)
+resources:
+  requests:
+    cpu: 500m
+    memory: 2Gi
+  limits:
+    cpu: "2"
+    memory: 4Gi
+
+# Persistencia
+persistence:
+  size: 10Gi
+
+# Exponer el servicio
+service:
+  type: NodePort
+  port: 9000
+  nodePort: 30000
+#------------------------------------------------------------------------#
+# Habilitar la Community Edition
+#community:
+#  enabled: true
+#------------------------------------------------------------------------#
+
+
+7 - Levantar todo
+	kubectl apply -f 00-namespace.yaml
+	
+	Crear SecretPassCode
+	kubectl create secret generic sonarqube-monitoring \
+          --namespace sonarqube \
+          --from-literal=monitoringPasscode='jl4+qsxcYfrXDA3K'
+
+	helm upgrade --install sonarqube sonarqube/sonarqube \
+		--version 2025.4.2  \
+		--namespace sonarqube \
+		-f 01-values.yaml
+
+8 - Verificar funcionamiento
+	kubectl get pods -n sonarqube
+	kubectl get svc -n sonarqube
+	
+######################################################################################################
+
+- Eliminar y limpiar completo
+
+helm uninstall sonarqube -n sonarqube
+kubectl delete secret sonarqube-monitoring sonarqube-postgresql -n sonarqube
+kubectl delete pvc sonarqube-data sonarqube-postgresql-data -n sonarqube
+kubectl delete namespace sonarqube

@@ -1,0 +1,16 @@
+#####################################################################################
+					>>>>	Comandos interesantes:	<<<<
+#####################################################################################
+#------------------------------------------------------------------------------------#
+		>> Problemas con Mautic <<
+#------------------------------------------------------------------------------------#
+
+- Checar si se llega por telnet ------------------> telnet "db-server" 3306
+- Checar si se puede acceder a mysql -------------> mysql -u root
+- En la BD, ver si el puerto esta escuchando -----> ss -tulpn | grep 3306 (tcp LISTEN 0 80 127.0.0.1:3306) -> Sig. que está localhost y no acepta conexiones externas.
+- Para habilitar las conexiones externas ---------> nano /etc/mysql/mariadb.conf.d/50-server.cnf
+										==> comentar:	bind-address = 127.0.0.1
+										==> agregar:  	bind-address = 0.0.0.0
+#------------------------------------------------------------------------------------#
+
+

@@ -1,0 +1,58 @@
+####	MARIADB o MYSQL 
+		systemctl restart mariadb
+		systemctl restart mysql
+#--------------------------------------------------------------------------#
+
+#. Accede a MySQL como superusuario
+		mysql
+		mysql -u root -p -h IP(ingresar la pass de root. Si no se configuro, omitir -p).
+	
+#. Crear nuevo usuario:
+		[(none)]> CREATE USER 'root'@'10.1.20.40' IDENTIFIED BY 'q1w2e3';
+		
+		[(none)]> CREATE USER 'pwmadmin'@'%' IDENTIFIED BY 'L2yD$aZH3i';
+		
+		
+#. Otorgar privilegios:
+		[(none)]> GRANT ALL PRIVILEGES ON menu_db.* TO 'root'@'10.1.20.40' IDENTIFIED BY 'q1w2e3';
+		[(none)]> GRANT ALL PRIVILEGES ON pwm.* TO 'pwmadmin'@'%' WITH GRANT OPTION;
+
+#. Aplicar los cambios
+		[(none)]> FLUSH PRIVILEGES;
+		
+#. Verificar los usuarios creados
+		[(none)]> SELECT * FROM users;
+		[(none)]> SELECT id, email, role FROM users;
+		[(none)]> SELECT user, host FROM mysql.user;
+		[(none)]> SELECT user, host FROM mysql.user WHERE user = 'root';
+
+#	Consultas:	
+		[(none)]> SHOW DATABASES;
+		[(none)]> USE "<database>";
+		[(none)]> SHOW TABLES;
+		[(none)]> DESCRIBE "<table>";
+#	Crear:
+		[(none)]> CREATE DATABASE menu_db;
+		[(none)]> USE menu_db;0
+		[(none)]> DROP DATABASE menu_db;
+		[(none)]> DROP USER 'root'@'10.1.20.40';
+
+
+
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
+#. Ejecutar el script en SQL para crear las Bases y tablas
+		[(none)]> source /ruta/absoluta/a/database.sql; (o) [(none)]> \. /ruta/absoluta/a/database.sql
+
+#--------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
+#. Aceptar conecciones externas
+	nano /etc/mysql/mariadb.conf.d/50-server.cnf
+		bind-address = 0.0.0.0
+
+	systemctl restart mariadb
+	netstat -tuln | grep 3306 --> [tcp  0  0 0.0.0.0:3306  0.0.0.0:*  LISTEN]
+	
+#--------------------------------------------------------------------------#
+
+/root/calendapp/server/sql/calendar_db.sql

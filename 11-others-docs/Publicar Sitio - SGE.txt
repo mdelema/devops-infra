@@ -1,0 +1,55 @@
+#---------------------------------------------------------#
+######### 	Publicar Sitio WEB Viejo --> SGE 	###########
+#---------------------------------------------------------#
+
+
+## Crear DNS:
+	## Crear en Cloudflare
+	Entrar a: "Dominio S.A"
+	Buscar el dominio: empresa.com.uy 
+		A la izquierda, entrar en: DNS 
+		- Agregar registro:
+			- Tipo: CNAME
+			- Nombre: NUEVO_SITO.com.uy
+			- Contenido: rp-prod , rp-test
+			- Guardar.
+	
+	## Crearlo en AD
+	entrar IP-AD
+	- Server Manager --> o buscar DNS Manager
+		> Roles 
+			> DNS Server
+			  > DNS
+				> SRV_RED
+				  > Forward Lookup Zones
+					- empresa.com.uy
+						- click derecho: New Alias (CNAME)..
+							- Alias name: NUEVO_SITO.com.uy
+							- (FQDN): NUEVO_SITO.com.uy
+							- (FQDN) for targuet host: rp-prod , rp-test (el mismo que Contenido)
+
+-----------------------------------------------------------------------------------------
+
+>> Crear Backend
+- entramos al server donde dejaron los archivos
+	- information server
+		- copiar el nombre
+		- sitios
+		- clik derecho - agregar website
+			- Site name: NUEVO_SITO.com.uy
+			- Physical path: Buscar donde dejaron los archivos
+				- dentro solo seleccionamos el HTML
+			- Crear la carpeta de "Logs" en el mismo nivel que "Html"
+			- Host name: NUEVO_SITO.com.uy
+		- pararce arriba y entrar a los detalles
+			- Logging: buscamos la carpeta de "Logs" que creamos.
+			- Apply (derecha arriba)
+	- Ir a la carpeta: NUEVO_SITO.com.uy
+		- Html
+			- porpiedades:
+				- Security 
+					- Edit:
+						- Location: 
+					.	- Advance Opitions: IUSR
+											NETWORK SERVICES
+		- Apply > Ok
