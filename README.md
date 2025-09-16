@@ -13,50 +13,45 @@ Cada carpeta representa un módulo independiente y documentado, que puede ser ut
 ## 📂 Estructura del repositorio
 ```plaintext
 $ProjectName/
-├── 01-setup-bash/
-│   └── scripts-iniciales.sh
+├── 01-bash/
+│   └── --/
 ├── 02-docker/
-│   ├── app-node/
-│   └── talk-coral/
+│   └── --/
 ├── 03-kubernetes/
-│   ├── other
-│   ├── sonarkube
-│   └── talk
+│   └── --/
 ├── 04-ansible/
-│   └── playbooks/
+│   └── --/
 ├── 05-terraform/
-│   ├── aws/
-│   └── digitalocean/
+│   └── --/
 ├── 06-monitoring/
-│   ├── prometheus/
-│   └── grafana/
+│   └── --/
 ├── 07-ci-cd/
-│   ├── github-actions/
-│   ├── gitlab-ci/
-│   └── jenkins/
-├── 08-other-project/
 │   └── --/
-├── 09-automate/
+├── 08-automate/
 │   └── --/
-├── 10-powershell/
+├── 09-powershell/
 │   └── --/
-├── 11-command-list/
+├── 10-command-list/
+│   └── --/
+├── 11-other-docs/
 │   └── --/
 └── README.md
 ```
 
 ## 📂 Estructura del repositorio
 
-- [01-bash-scripts](01-bash-scripts/) → Scripts de automatización inicial.
+- [01-bash](01-bash/) → Scripts de automatización.
 - [02-docker](02-docker/) → Proyectos con Docker y Docker Compose.
 - [03-kubernetes](03-kubernetes/) → Manifests y despliegues en Kubernetes.
 - [04-ansible](04-ansible/) → Playbooks de automatización.
 - [05-terraform](05-terraform/) → Infraestructura como código.
 - [06-monitoring](06-monitoring/) → Prometheus + Grafana.
-- [07-others-proyectos](07-others-proyectos/) → Experimentos y labs.
+- [07-ci-cd](07-ci-cd/) → Flujos de Integraciones y desarrollo.
 - [08-automate](08-automate/) → Flujos de automatización avanzada.
-- [09-powershell](09-powershell/) → Scripts de PowerShell.
+- [09-powershell](09-powershell/) → Scripts y flujos de PowerShell.
 - [10-comand-list](10-comand-list/) → Tips y colecciones de comandos.
+- [11-others-docs](11-others-docs/) → Documento, Experimentos y labs.
+
 
 ## 📌 Tecnologías y herramientas utilizadas
 - Linux (Debian/Ubuntu/CentOS)
@@ -74,4 +69,5 @@ $ProjectName/
 **Marcos de Lema**  
 
 [LinkedIn](https://www.linkedin.com/in/marcos-de-lema/) | [GitHub](https://github.com/mdelema)
+
 
