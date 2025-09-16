@@ -1,4 +1,4 @@
-# Project DevOps Infra 🚀
+# DevOps & Infra 🚀
 
 Este repositorio es un **portfolio de proyectos DevOps enfocados en infraestructura**, mostrando habilidades en:
 
@@ -69,5 +69,6 @@ $ProjectName/
 **Marcos de Lema**  
 
 [LinkedIn](https://www.linkedin.com/in/marcos-de-lema/) | [GitHub](https://github.com/mdelema)
+
 
 
